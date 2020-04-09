@@ -5,6 +5,8 @@
 
 class LinkedPair:
     def __init__(self, key, value):
+        # if two values hash to the same int, set self.next of the first value to the current LinkedPair
+        #prev.self.next = current
         self.key = key
         self.value = value
         self.next = None
