@@ -32,9 +32,10 @@ class HashTable:
     that accepts string keys
     '''
 
-    def __init__(self, capacity):
+    def __init__(self, capacity, items=0):
         self.capacity = capacity  # Number of buckets in the hash table
         self.storage = [None] * capacity
+        self.items = items
 
     def _hash(self, key):
         '''
@@ -70,6 +71,8 @@ class HashTable:
 
         Fill this in.
         '''
+        if self.items == self.capacity:
+            self.resize()
         index = self._hash_mod(key)
         current_pair = self.storage[index]
         last_pair = None
@@ -84,6 +87,7 @@ class HashTable:
             new_pair = LinkedPair(key, value)
             new_pair.next = self.storage[index]
             self.storage[index] = new_pair
+        self.items += 1
 
     def remove(self, key):
         '''
