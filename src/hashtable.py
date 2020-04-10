@@ -6,10 +6,24 @@
 class LinkedPair:
     def __init__(self, key, value):
         # if two values hash to the same int, set self.next of the first value to the current LinkedPair
-        #prev.self.next = current
+        # prev.self.next = current
         self.key = key
         self.value = value
         self.next = None
+
+    def __str__(self):
+        curr_node = self
+        curr_val = f"{curr_node.value}"
+        while curr_node.next is not None:
+            curr_val += f" ->> {curr_node.next.value}"
+            curr_node = curr_node.next
+        return curr_val
+
+    def find(self, key):
+        while self.key != key:
+            if self.key != key and self.next is not None:
+                self = self.next
+        return self.value
 
 
 class HashTable:
@@ -61,6 +75,7 @@ class HashTable:
         last_pair = None
 
         while current_pair is not None and current_pair.key != key:
+            print('Warn: Collision detected for key ' + key)
             last_pair = current_pair
             current_pair = last_pair.next
         if current_pair is not None:
@@ -78,7 +93,8 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        self.storage[index] = None
 
     def retrieve(self, key):
         '''
@@ -88,7 +104,10 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+        if self.storage[index] is None:
+            return None
+        return self.storage[index].find(key)
 
     def resize(self):
         '''
@@ -97,7 +116,17 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        old_storage = self.storage
+        self.capacity *= 2
+        # create new array of size * 2
+        self.storage = [None] * self.capacity
+        # move all values to new array
+        for pair in old_storage:
+            if pair is not None:
+                self.insert(pair.key, pair.value)
+                if pair.next is not None:
+                    next_pair = pair.next
+                    self.insert(next_pair.key, next_pair.value)
 
 
 if __name__ == "__main__":
