@@ -127,10 +127,10 @@ class HashTable:
         # move all values to new array
         for pair in old_storage:
             if pair is not None:
-                self.insert(pair.key, pair.value)
-                if pair.next is not None:
-                    next_pair = pair.next
+                next_pair = pair
+                while next_pair is not None:
                     self.insert(next_pair.key, next_pair.value)
+                    next_pair = next_pair.next
 
 
 if __name__ == "__main__":
