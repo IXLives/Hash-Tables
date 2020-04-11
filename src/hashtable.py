@@ -23,7 +23,7 @@ class LinkedPair:
         while self.key != key:
             if self.key != key and self.next is not None:
                 self = self.next
-        return self.value
+        return self
 
 
 class HashTable:
@@ -71,23 +71,23 @@ class HashTable:
 
         Fill this in.
         '''
-        if self.items == self.capacity:
-            self.resize()
+        # if self.items > self.capacity * 1.5:
+        #     self.resize()
         index = self._hash_mod(key)
         current_pair = self.storage[index]
         last_pair = None
 
         while current_pair is not None and current_pair.key != key:
-            print('Warn: Collision detected for key ' + key)
+            # print('Warn: Collision detected for key ' + key)
             last_pair = current_pair
             current_pair = last_pair.next
         if current_pair is not None:
             current_pair.value = value
         else:
             new_pair = LinkedPair(key, value)
+            self.items += 1
             new_pair.next = self.storage[index]
             self.storage[index] = new_pair
-        self.items += 1
 
     def remove(self, key):
         '''
@@ -111,7 +111,7 @@ class HashTable:
         index = self._hash_mod(key)
         if self.storage[index] is None:
             return None
-        return self.storage[index].find(key)
+        return self.storage[index].find(key).value
 
     def resize(self):
         '''
